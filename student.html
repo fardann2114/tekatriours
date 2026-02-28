@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile</title>
+
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body class="dark-mode">
+
+<nav class="navbar">
+    <div class="logo">TEKATRIOUR'S</div>
+    <ul class="nav-links">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#students">Siswa</a></li>
+        <li><a href="index.html#timeline">Timeline</a></li>
+        <li><a href="index.html#gallery">Galeri</a></li>
+    </ul>
+</nav>
+
+<div class="back-btn" onclick="window.location.href='index.html'">← Kembali</div>
+
+<div class="student-detail">
+    <div class="card-detail">
+
+        <!-- KIRI FOTO -->
+        <div class="left-photo">
+            <img id="detailPhoto">
+        </div>
+
+        <!-- TENGAH DETAIL -->
+        <div class="center-info" id="detailInfo"></div>
+
+        <!-- KANAN ALBUM -->
+        <div class="right-album spotify-ui">
+
+    <img id="albumCover">
+
+    <div class="mini-player">
+    <button id="playBtn">▶</button>
+    <span id="songText">
+        <strong id="songTitle">Unknown Title</strong>
+        – 
+        <span id="songArtist">Unknown Artist</span>
+    </span>
+</div>
+
+    <div class="progress-container">
+        <span id="currentTime">0:00</span>
+        <div class="progress-bar" id="progressBar">
+            <div class="progress"></div>
+        </div>
+        <span id="duration">0:00</span>
+    </div>
+
+</div>
+
+    </div>
+</div>
+
+<!-- MEMORIES SLIDER -->
+<div class="memories-section">
+    <h3>Memories</h3>
+
+    <div class="carousel">
+        <button class="nav prev">❮</button>
+
+        <div class="carousel-track" id="memoriesGrid"></div>
+
+        <button class="nav next">❯</button>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p class="footer-year">2023-2026</p>
+        <p>Once a TEKATRI, always a TEKATRI.</p> 
+        <a id="igLink" target="_blank" class="footer-ig">
+            <i class="fab fa-instagram"></i>
+        </a>
+    </div>
+</footer>
+
+<!-- IMAGE POPUP -->
+<div class="image-popup" id="imagePopup">
+    <span class="close-popup">&times;</span>
+    <img id="popupImage" src="" alt="Preview">
+</div>
+
+<audio id="studentMusic" loop></audio>
+
+<script src="data.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get("id"));
+    const student = students.find(s => s.id === id);
+
+    if (!student) {
+        document.body.innerHTML = "<h2 style='text-align:center'>Data tidak ditemukan</h2>";
+        return;
+    }
+
+    document.title = `Profile - ${student.name}`;
+
+    document.body.style.setProperty("--bg", student.themeBg || "#111");
+    document.body.style.setProperty("--text", student.themeText || "#fff");
+
+    document.getElementById("detailPhoto").src = student.photo;
+
+    document.getElementById("detailInfo").innerHTML = `
+        <h2>${student.name}</h2>
+        <p><strong>Role:</strong> ${student.role}</p>
+        <p><strong>TTL:</strong> ${student.TTL}</p>
+        <p><strong>Hobi:</strong> ${student.hobby}</p>
+        <p><strong>Favorite Song:</strong> ${student.FavSong}</p>
+        <p><strong>Quote:</strong> ${student.quote}</p>
+        <hr style="margin:20px 0;">
+        <p style="font-style:italic;">"${student.message}"</p>
+    `;
+
+   const memoriesGrid = document.getElementById("memoriesGrid");
+
+if (Array.isArray(student.memories) && student.memories.length > 0) {
+
+    student.memories.forEach(img => {
+        const image = document.createElement("img");
+        image.src = img;
+        memoriesGrid.appendChild(image);
+    });
+
+    const images = memoriesGrid.querySelectorAll("img");
+    let current = 0;
+
+    function updateCarousel() {
+        images.forEach(img => {
+            img.classList.remove("active", "prev", "next");
+        });
+
+        images[current].classList.add("active");
+
+        const prevIndex = (current - 1 + images.length) % images.length;
+        const nextIndex = (current + 1) % images.length;
+
+        images[prevIndex].classList.add("prev");
+        images[nextIndex].classList.add("next");
+    }
+
+    document.querySelector(".next").onclick = () => {
+        current = (current + 1) % images.length;
+        updateCarousel();
+    };
+
+    document.querySelector(".prev").onclick = () => {
+        current = (current - 1 + images.length) % images.length;
+        updateCarousel();
+    };
+
+    updateCarousel();
+
+} else {
+    memoriesGrid.innerHTML = "<p>Belum ada memories.</p>";
+}
+
+    // Album cover pakai foto siswa
+document.getElementById("albumCover").src = student.album;
+
+// Play button
+const audio = document.getElementById("studentMusic");
+
+if (student.music) {
+
+    audio.src = student.music;
+
+    const album = document.getElementById("albumCover");
+    const playBtn = document.getElementById("playBtn");
+    const progressBar = document.getElementById("progressBar");
+    const progress = document.querySelector(".progress");
+    const currentTimeEl = document.getElementById("currentTime");
+    const durationEl = document.getElementById("duration");
+
+    // music data.js
+    if (student.songTitle) {
+        document.getElementById("songTitle").innerText = student.songTitle;
+    }
+    if (student.songArtist) {
+        document.getElementById("songArtist").innerText = student.songArtist;
+    }
+
+    playBtn.onclick = () => {
+        if (audio.paused) {
+            audio.play();
+            playBtn.innerHTML = "⏸";
+            album.classList.add("playing");
+        } else {
+            audio.pause();
+            playBtn.innerHTML = "▶";
+            album.classList.remove("playing");
+        }
+    };
+
+    // Update duration
+    audio.addEventListener("loadedmetadata", () => {
+        durationEl.innerText = formatTime(audio.duration);
+    });
+
+    // Update progress real time
+    audio.addEventListener("timeupdate", () => {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        progress.style.width = percent + "%";
+        currentTimeEl.innerText = formatTime(audio.currentTime);
+    });
+
+    // Click progress to seek
+    progressBar.addEventListener("click", (e) => {
+        const width = progressBar.clientWidth;
+        const clickX = e.offsetX;
+        const duration = audio.duration;
+
+        audio.currentTime = (clickX / width) * duration;
+    });
+
+    function formatTime(time) {
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+
+    }
+ 
+    const shouldAutoPlay = sessionStorage.getItem("autoPlayMusic");
+
+if (shouldAutoPlay === "true") {
+    audio.volume = 0.5;
+
+    audio.play().then(() => {
+        playBtn.innerHTML = "⏸";
+        album.classList.add("playing");
+    }).catch(err => {
+        console.log("Autoplay gagal:", err);
+    });
+
+    sessionStorage.removeItem("autoPlayMusic");
+
+    }
+}
+// IG link
+if (student.ig) {
+    document.getElementById("igLink").href =
+        `https://instagram.com/${student.ig.replace('@','').trim()}`;
+}
+
+    window.addEventListener("scroll", () => {
+        const navbar = document.querySelector(".navbar");
+        if (window.scrollY > 50) {
+            navbar.classList.add("scrolled");
+        } else {
+            navbar.classList.remove("scrolled");
+        }
+    });
+
+    const popup = document.getElementById("imagePopup");
+const popupImg = document.getElementById("popupImage");
+const closePopup = document.querySelector(".close-popup");
+
+document.querySelectorAll(".carousel-track img").forEach(img => {
+    img.addEventListener("click", () => {
+        popup.style.display = "flex";
+        popupImg.src = img.src;
+    });
+});
+
+closePopup.addEventListener("click", () => {
+    popup.style.display = "none";
+});
+
+popup.addEventListener("click", (e) => {
+    if (e.target === popup) {
+        popup.style.display = "none";
+    }
+});
+
+});
+</script>
+
+</body>
+</html>
