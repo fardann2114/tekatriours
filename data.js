@@ -91,7 +91,7 @@ FavSong:"Yellow-Cold Play",
 ig: "znthr_",
 songTitle:"",
 songArtist:"",
-music:"",
+music:"assets/music/torikmbg.mp3",
 album:"",
 memories:[
     "assets/img/torik1.jpeg",
