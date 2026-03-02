@@ -484,50 +484,48 @@ body.dark-mode {
 }
 
 /* responsive student */
-@media (max-width: 767px) {
+/* RESPONSIVE STUDENT - TETEP 3 KOLOM */
+@media (max-width: 768px) {
 
     .card-detail {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
+        flex-direction: row; /* tetap horizontal */
+        gap: 15px;
+    }
+
+    .left-photo {
+        flex: 0 0 110px;
     }
 
     .left-photo img {
-        max-width: 260px;
+        width: 100%;
         height: auto;
     }
 
-    .right-album {
-        margin-top: 30px;
+    .center-info {
+        flex: 1;
+        padding: 0 5px;
     }
 
-    .carousel-track img {
-        width: 250px;
-        height: 150px;
+    .center-info h2 {
+        font-size: 18px;
     }
 
-}
-
-@media (min-width: 768px) and (max-width: 1024px) {
-
-    .card-detail {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .left-photo img {
-        max-width: 320px;
-        height: auto;
+    .center-info p {
+        font-size: 12px;
     }
 
     .right-album {
-        margin-top: 40px;
+        flex: 0 0 100px;
     }
 
-    .carousel-track img {
-        width: 320px;
-        height: 180px;
+    .right-album img {
+        width: 70px;
+        height: 70px;
+    }
+
+    #songText {
+        font-size: 10px;
+        max-width: 100px;
     }
 
 }
