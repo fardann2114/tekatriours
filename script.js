@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // =============================
     // INTRO ANIMATION
-    // =============================
     setTimeout(() => {
         const intro = document.querySelector('.book-intro');
         if (intro) intro.classList.add('open');
@@ -12,10 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const studentGrid = document.getElementById('studentGrid');
     const studentSearch = document.getElementById('studentSearch');
 
-
-    // =============================
     // RENDER STUDENTS
-    // =============================
     function renderStudents(data) {
         if (!studentGrid) return;
 
@@ -48,9 +43,7 @@ card.addEventListener('click', () => {
     }
 
 
-    // =============================
     // SEARCH FUNCTION
-    // =============================
     if (studentSearch) {
         studentSearch.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
@@ -68,9 +61,7 @@ card.addEventListener('click', () => {
     }
 
 
-    // =============================
     // DARK MODE
-    // =============================
     const themeToggle = document.getElementById('theme-toggle');
 
     if (themeToggle) {
@@ -86,9 +77,7 @@ card.addEventListener('click', () => {
     }
 
 
-    // =============================
-    // MUSIC CONTROL
-    // =============================
+    // Music btn
     const music = document.getElementById('bg-music');
     const musicToggle = document.getElementById('music-toggle');
     let isPlaying = false;
@@ -122,9 +111,7 @@ card.addEventListener('click', () => {
 });
 
 
-// =============================
-// SCROLL REVEAL ANIMATION
-// =============================
+// animasi scroll
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
