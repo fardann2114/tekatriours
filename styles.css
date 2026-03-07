@@ -488,8 +488,11 @@ body.dark-mode {
 @media (max-width: 768px) {
 
     .card-detail {
-        flex-direction: row; /* tetap horizontal */
+        flex-direction: row; 
         gap: 15px;
+        .card-detail {
+    overflow-x: hidden;
+}
     }
 
     .left-photo {
@@ -538,9 +541,9 @@ body.dark-mode {
 
 .left-photo img {
     width: 100%;
-    max-width: 350px;   /* semua foto sama max-width */
-    height: auto;      /* semua foto sama height */
-    object-fit: cover;  /* crop otomatis biar pas kotak */
+    max-width: 350px;   
+    height: auto;      
+    object-fit: cover;  
     border-radius: 30px;
     box-shadow: 0 25px 60px rgba(0,0,0,0.5);
     aspect-ratio: 3 / 4;
