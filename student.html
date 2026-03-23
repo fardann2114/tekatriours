@@ -8,6 +8,9 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap" rel="stylesheet">
 
 </head>
 <body class="dark-mode">
@@ -59,8 +62,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
 
 </div>
 
-    </div>
-</div>
+    </div >
+ </div>
+
+ <div id="quoteSection"></div>
 
 <!-- MEMORIES SLIDER -->
 <div class="memories-section">
@@ -114,17 +119,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("detailPhoto").src = student.photo;
 
-    document.getElementById("detailInfo").innerHTML = `
-        <h2>${student.name}</h2>
-        <p><strong>Role:</strong> ${student.role}</p>
-        <p><strong>TTL:</strong> ${student.TTL}</p>
-        <p><strong>Hobi:</strong> ${student.hobby}</p>
-        <p><strong>Favorite Song:</strong> ${student.FavSong}</p>
-        <p><strong>Quote:</strong> ${student.quote}</p>
-        <hr style="margin:20px 0;">
-        <p style="font-style:italic;">"${student.message}"</p>
-    `;
+  document.getElementById("detailInfo").innerHTML = `
+    <div class="profile-header">
+        <h2>${student.role}</h2>
+        <h1>${student.name}</h1>
+    </div>
 
+    <div class="meta-group">
+        <div class="meta-item">
+            <i class="fas fa-calendar"></i>
+            <p>${student.TTL}</p>
+        </div>
+
+        <div class="meta-item">
+            <i class="fas fa-heart"></i>
+            <p>${student.hobby}</p>
+        </div>
+
+        <div class="meta-item">
+            <i class="fas fa-music"></i>
+            <p>${student.FavSong}</p>
+        </div>
+    </div>
+`;
+
+document.getElementById("quoteSection").innerHTML = `
+    <div class="quote-box">
+        <p></p>
+    </div>
+`;
    const memoriesGrid = document.getElementById("memoriesGrid");
 
 if (Array.isArray(student.memories) && student.memories.length > 0) {
@@ -167,6 +190,22 @@ if (Array.isArray(student.memories) && student.memories.length > 0) {
 } else {
     memoriesGrid.innerHTML = "<p>Belum ada memories.</p>";
 }
+
+function typeQuote(text, element, speed = 85) {
+    let i = 0;
+    element.innerHTML = "";
+    function typing() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typing, speed);
+        }
+    }
+    typing();
+}
+
+const quoteEl = document.querySelector(".quote-box p");
+typeQuote(`"${student.quote}"`, quoteEl);
 
     // Album cover pakai foto siswa
 document.getElementById("albumCover").src = student.album;

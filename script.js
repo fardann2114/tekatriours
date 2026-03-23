@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
                      class="student-img">
                 <div class="student-info">
                     <h3>${student.name}</h3>
-                    <p>"${student.quote}"</p>
+                    <p>- ${student.role} -</p>
                 </div>
             `;
 
@@ -157,3 +157,147 @@ function showDesktopGuide() {
 
 window.addEventListener("load", checkDeviceMode);
 window.addEventListener("resize", checkDeviceMode);
+
+
+
+const text = `Jika suatu hari nanti kita kembali 
+membuka halaman ini,
+mungkin kita sudah berada di tempat yang berbeda.
+
+Ada yang sedang mengejar mimpi,
+ada yang sibuk dengan kehidupannya,
+dan mungkin kita sudah jarang saling bertemu.
+
+Namun ketika foto-foto ini muncul kembali,
+tawa di kelas,
+candaan saat istirahat,
+dan cerita-cerita kecil yang dulu terasa biasa saja…
+
+akan terasa begitu berharga.
+
+Karena di tempat inilah
+kita pernah menjadi bagian dari cerita yang sama.
+
+TEKATRIOUR'S bukan hanya tentang masa sekolah,
+tetapi tentang tempat
+di mana kita pernah bertumbuh bersama.
+
+Dan suatu hari nanti,
+ketika kita melihat kembali semua ini,
+
+kita akan tersenyum
+dan berkata:
+
+"Ah… dulu kita pernah seperti ini."`
+
+const typingElement = document.getElementById("typing-text")
+const signature = document.querySelector(".signature")
+const messageSection = document.querySelector(".message-section")
+
+let index = 0
+let started = false
+
+function typeWriter(){
+
+    if(!typingElement) return
+
+    if(index < text.length){
+
+        const char = text.charAt(index)
+
+        typingElement.innerHTML += char
+
+        index++
+
+        let speed = 95
+
+        if(char === ".") speed = 250
+        if(char === ",") speed = 500
+        if(char === "\n") speed = 600
+
+        setTimeout(typeWriter, speed)
+
+    }else{
+
+        setTimeout(revealFinalMemory,2000)
+
+    }
+
+}
+
+
+
+const slides = document.querySelectorAll(".memory-bg img")
+let slideIndex = 0
+let slideInterval
+
+function startSlideshow(){
+
+    if(slides.length === 0) return
+
+    slideInterval = setInterval(()=>{
+
+        slides[slideIndex].classList.remove("active")
+
+        slideIndex++
+
+        if(slideIndex >= slides.length){
+            slideIndex = 0
+        }
+
+        slides[slideIndex].classList.add("active")
+
+    },5000)
+
+}
+
+
+
+if(messageSection){
+
+    const observer = new IntersectionObserver((entries)=>{
+
+        entries.forEach(entry=>{
+
+            if(entry.isIntersecting && !started){
+
+                started = true
+
+                setTimeout(typeWriter,800)
+
+                startSlideshow()
+
+            }
+
+        })
+
+    },{
+        threshold:0.6
+    })
+
+    observer.observe(messageSection)
+
+}
+
+function revealFinalMemory(){
+
+    const memoryBg = document.querySelector(".memory-bg")
+    const finalPhoto = document.querySelector(".final-photo")
+
+    clearInterval(slideInterval)
+
+    if(memoryBg){
+        memoryBg.classList.add("fade")
+    }
+
+    if(finalPhoto){
+        finalPhoto.classList.add("show")
+    }
+
+    if(signature){
+        setTimeout(()=>{
+            signature.classList.add("show")
+        },2000)
+    }
+
+}
