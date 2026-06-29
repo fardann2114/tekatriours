@@ -16,7 +16,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
 <body class="dark-mode">
 
 <nav class="navbar">
-    <div class="logo">TEKATRIOUR'S</div>
+    <div class="logo"><img src="assets/img/logo.jpeg" alt="Logo TKJ 3" class="nav-logo">
+     <span>TEKATRIOUR'S</span>
+    </div>
     <ul class="nav-links">
         <li><a href="index.html#home">Home</a></li>
         <li><a href="index.html#students">Siswa</a></li>
@@ -121,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("detailInfo").innerHTML = `
     <div class="profile-header">
-        <h2>${student.role}</h2>
+        <span class="role-badge">${student.role}</span>
         <h1>${student.name}</h1>
     </div>
 

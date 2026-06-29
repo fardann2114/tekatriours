@@ -13,13 +13,17 @@
 <body class="dark-mode">
     <div id="book-intro" class="book-intro">
         <div class="book-cover">
+            <img src="assets/img/buku1.png" alt="Logo TKJ 3" class="intro-logo">
             <h1>TEKATRIOUR'S</h1>
             <p>Membuka Lembaran Kenangan...</p>
         </div>
     </div>
 
     <nav class="navbar">
-        <div class="logo">TEKATRIOUR'S</div>
+       <div class="logo">
+             <img src="assets/img/logo.jpeg" alt="Logo TKJ 3" class="nav-logo">
+            <span>TEKATRIOUR'S</span>
+        </div>
         <ul class="nav-links">
             <li><a href="#home">Home</a></li>
             <li><a href="#students">Siswa</a></li>
@@ -49,7 +53,7 @@
         <div class="container">
             <h2 class="section-title">Profil Siswa</h2>
             <div class="search-container">
-                <input type="text" id="studentSearch" placeholder="Cari nama rekan seangkatan...">
+                <input type="text" id="studentSearch" placeholder="Cari nama siswa/i tekatriours...">
             </div>
             <div class="student-grid" id="studentGrid">
                 <!-- Student Cards dari JS -->
@@ -57,30 +61,62 @@
         </div>
     </section>
 
-    <section id="timeline" class="section bg-alt">
+   <section id="timeline" class="section bg-alt">
         <div class="container">
             <h2 class="section-title">Perjalanan Kita</h2>
-            <div class="timeline">
-                <div class="timeline-item left reveal">
-                    <div class="timeline-content">
-                        <h3>Kelas 10</h3>
-                        <p>Awal mula pertemuan, masa-masa MPLS, dan adaptasi di lingkungan TKJ.</p>
+            <div class="timeline-v2">
+                
+                <!-- Kelas 10 -->
+                <div class="timeline-step left reveal">
+                    <div class="timeline-marker">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+
+                    <div class="timeline-content-v2" onclick="openAlbum('kelas10')">
+                        <span class="timeline-year">2023 - Kelas X</span>
+                        <h3>MPLS dan UTAS</h3>
+                        <p>Masa-masa awal perjalanan tekatriours dari MPLS hingga momen momen yang menyatukan kita menjadi kelas yang solid dan kompak... yaa walaupun ada banyak lika likunya.</p>
+                        <div class="timeline-image">
+                            <img src="assets/img/old.jpeg" alt="Kelas 10">
+                        </div>
                     </div>
                 </div>
-                <div class="timeline-item right reveal">
-                    <div class="timeline-content">
-                        <h3>Kelas 11</h3>
-                        <p>Masa PKL, pendalaman materi jaringan, dan ikatan persaudaraan yang menguat.</p>
+
+                <!-- Kelas 11 -->
+                <div class="timeline-step right reveal">
+                    <div class="timeline-marker">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <div class="timeline-content-v2" onclick="openAlbum('kelas11')">
+                        <span class="timeline-year">2024 - Kelas XI</span>
+                        <h3>Praktek dan PKL</h3>
+                        <p>Masa-masa di kelas XI, mulai sibuk dengan mempelajari jaringan komputer mulai dari mikrotik, kabel LAN, kabel fiber optic, debian, software jaringan dan hardware. 
+                            lalu kita disibukkan dengan PKL di perusahaan yang berbeda-beda, mulai dari perusahaan IT, bank, dan perusahaan lainnya.
+                        </p>
+                        <div class="timeline-image">
+                            <img src="assets/img/2 (2).jpg" alt="Kelas 11">
+                        </div>
                     </div>
                 </div>
-                <div class="timeline-item left reveal">
-                    <div class="timeline-content">
-                        <h3>Kelas 12</h3>
-                        <p>Uji kompetensi, persiapan masa depan, dan detik-detik perpisahan.</p>
+
+                <!-- Kelas 12 -->
+                <div class="timeline-step left reveal">
+                    <div class="timeline-marker">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="timeline-content-v2" onclick="openAlbum('kelas12')">
+                        <span class="timeline-year">2025/2026 - Kelas XII</span>
+                        <h3>UKK dan Perpisahan</h3>
+                        <p> Pkl telah selesai lalu kita disambut dengan TKA, UKK, UJIKOM dan persiapan untuk bekerja/melanjutkan.</p>
+                        <div class="timeline-image">
+                            <img src="assets/img/juara.jpeg" alt="Kelas 12">
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
+    </section>
     </section>
 
     <section id="gallery" class="section">
@@ -142,23 +178,36 @@
 
    <audio id="bg-music" src="assets/music/mbg1.mp3" loop preload="auto"></audio>
 
-    <script src="data.js"></script>
-    <script src="script.js"></script>
-    <div id="devicePopup" class="device-popup">
-    <div class="device-box">
-        <div class="rotate-icon">📱</div>
-
-        <h2>Disarankan Menggunakan Mode Desktop</h2>
-        <p>
-            aktifkan mode desktop 
-            dan Putar perangkat ke mode landscape untuk pengalaman terbaik.
-        </p>
-
-        <div class="device-buttons">
-            <button onclick="showDesktopGuide()">Mode Desktop</button>
-            <button onclick="closeDevicePopup()">Lanjutkan</button>
+   <!-- ALBUM MODAL TIMELINE -->
+    <div id="albumModal" class="album-modal">
+        <div class="album-modal-content">
+            <span class="close-album" onclick="closeAlbum()">&times;</span>
+            <h2 id="albumTitle" style="color: var(--secondary); font-size: 2rem;">Album Kenangan</h2>
+            <p id="albumDesc" style="margin-bottom: 30px; opacity: 0.8;"></p>
+            
+            <div class="album-grid" id="albumGrid">
+                </div>
         </div>
     </div>
-</div>
+
+    <div id="imagePopup" class="image-popup">
+        <span class="close-popup" onclick="closeImagePopup()">&times;</span>
+        <img id="popupImage" src="" alt="Detail Foto">
+    </div>
+
+    <div id="devicePopup" class="device-popup">
+        <div class="device-box">
+            <div class="rotate-icon">📱</div>
+            <h2>Disarankan Menggunakan Mode Desktop</h2>
+            <p>Aktifkan mode desktop dan putar perangkat ke mode landscape untuk pengalaman terbaik.</p>
+            <div class="device-buttons">
+                <button onclick="showDesktopGuide()">Mode Desktop</button>
+                <button onclick="closeDevicePopup()">Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

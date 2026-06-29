@@ -25,12 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
                      alt="${student.name}" 
                      class="student-img">
                 <div class="student-info">
-                    <h3>${student.name}</h3>
-                    <p>- ${student.role} -</p>
+                    <span class="card-role">${student.role}</span>
+                    <h3 class="card-name">${student.name}</h3>
                 </div>
             `;
 
-          // Redirect + trigger autoplay di student page
+          // redirect + trigger autoplay di student page
 card.addEventListener('click', () => {
     sessionStorage.setItem("autoPlayMusic", "true");
     window.location.href = `student.html?id=${student.id}`;
@@ -55,7 +55,7 @@ card.addEventListener('click', () => {
     }
 
 
-    // Render awal
+    // render awal
     if (typeof students !== 'undefined') {
         renderStudents(students);
     }
@@ -77,7 +77,7 @@ card.addEventListener('click', () => {
     }
 
 
-    // Music btn
+    // music btn
     const music = document.getElementById('bg-music');
     const musicToggle = document.getElementById('music-toggle');
     let isPlaying = false;
@@ -94,7 +94,7 @@ card.addEventListener('click', () => {
             musicToggle.classList.toggle('active');
         };
 
-        // Autoplay setelah user interaction
+        // autoplay setelah user interaction
         function startMusicOnce() {
             if (!isPlaying) {
                 music.play().then(() => {
@@ -156,7 +156,7 @@ function showDesktopGuide() {
 }
 
 window.addEventListener("load", checkDeviceMode);
-window.addEventListener("resize", checkDeviceMode);
+window.addEventListener("resize", checkDeviceMode); 
 
 
 
@@ -227,60 +227,60 @@ function typeWriter(){
 
 
 
-const slides = document.querySelectorAll(".memory-bg img")
+// not(.final-photo)foto perpisahan g ikt muter di awal
+const slides = document.querySelectorAll(".memory-bg img:not(.final-photo)")
 let slideIndex = 0
 let slideInterval
 
 function startSlideshow(){
-
     if(slides.length === 0) return
 
     slideInterval = setInterval(()=>{
-
         slides[slideIndex].classList.remove("active")
-
         slideIndex++
-
         if(slideIndex >= slides.length){
             slideIndex = 0
         }
-
         slides[slideIndex].classList.add("active")
-
     },5000)
-
 }
 
+
+function typeWriter(){
+    if(!typingElement) return
+    if(index < text.length){
+        const char = text.charAt(index)
+        typingElement.innerHTML += char
+        index++
+        let speed = 95
+        if(char === ".") speed = 250
+        if(char === ",") speed = 500
+        if(char === "\n") speed = 600
+        setTimeout(typeWriter, speed)
+    }else{
+        setTimeout(revealFinalMemory,2000)
+    }
+}
 
 
 if(messageSection){
-
-    const observer = new IntersectionObserver((entries)=>{
-
+    const messageObserver = new IntersectionObserver((entries)=>{
         entries.forEach(entry=>{
-
             if(entry.isIntersecting && !started){
-
                 started = true
-
-                setTimeout(typeWriter,800)
-
+                setTimeout(typeWriter, 800)
                 startSlideshow()
-
             }
-
         })
-
     },{
-        threshold:0.6
+        threshold: 0.2 
     })
 
-    observer.observe(messageSection)
-
+    messageObserver.observe(messageSection)
 }
 
-function revealFinalMemory(){
 
+function revealFinalMemory(){
     const memoryBg = document.querySelector(".memory-bg")
     const finalPhoto = document.querySelector(".final-photo")
 
@@ -289,15 +289,156 @@ function revealFinalMemory(){
     if(memoryBg){
         memoryBg.classList.add("fade")
     }
-
     if(finalPhoto){
         finalPhoto.classList.add("show")
     }
-
     if(signature){
         setTimeout(()=>{
             signature.classList.add("show")
         },2000)
     }
-
 }
+
+
+window.openAlbum = function(yearKey) {
+    const modal = document.getElementById("albumModal");
+    const grid = document.getElementById("albumGrid");
+    const title = document.getElementById("albumTitle");
+    const desc = document.getElementById("albumDesc");
+
+
+    if (typeof albumTimelineData === 'undefined' || !albumTimelineData[yearKey]) {
+        console.error("Data album tidak ditemukan untuk kunci:", yearKey);
+        return;
+    }
+
+    const data = albumTimelineData[yearKey];
+    title.innerText = data.title;
+    desc.innerText = data.desc;
+
+    grid.innerHTML = "";
+
+    // looping foton ke dlm grid
+    data.photos.forEach(photoSrc => {
+        const img = document.createElement("img");
+        img.src = photoSrc;
+        img.className = "album-item-img";
+        
+        // klik gambar muncul popup
+        img.onclick = () => {
+            const popup = document.getElementById("imagePopup");
+            const popupImg = document.getElementById("popupImage");
+            if(popup && popupImg) {
+                popup.classList.add("show"); 
+                popupImg.src = photoSrc;
+            }
+        };
+
+        grid.appendChild(img);
+    });
+
+    // modal album
+    modal.classList.add("show");
+    document.body.style.overflow = "hidden"; // Biar background web gak ikut ke-scroll
+};
+
+// closeAlbum 
+window.closeAlbum = function() {
+    const modal = document.getElementById("albumModal");
+    if (!modal) return;
+    
+    modal.classList.remove("show");
+    
+    // animasi CSS beres baru balikin scroll web
+    setTimeout(() => {
+        document.body.style.overflow = "auto";
+    }, 300);
+};
+
+// klik di luar kotak album 
+document.addEventListener("DOMContentLoaded", () => {
+    const albumModalElement = document.getElementById("albumModal");
+    if (albumModalElement) {
+        albumModalElement.addEventListener("click", (e) => {
+            if (e.target.id === "albumModal") {
+                window.closeAlbum();
+            }
+        });
+    }
+});
+
+
+// nutup popup foto besar
+function closeImagePopup() {
+    const popup = document.getElementById("imagePopup");
+    if (!popup) return;
+
+    popup.classList.remove("show");
+    
+    // scroll modal album
+    const albumModal = document.getElementById("albumModal");
+    if(albumModal) albumModal.style.overflow = "auto";
+}
+
+// Klik di luar foto buat close album
+const imagePopupElement = document.getElementById("imagePopup");
+if (imagePopupElement) {
+    imagePopupElement.addEventListener("click", (e) => {
+        // kalo yang diklik adalah backgroundnya (id="imagePopup"), bukan gambarnya
+        if (e.target.id === "imagePopup") {
+            closeImagePopup();
+        }
+    });
+}
+
+
+window.closeImagePopup = function() {
+    const popup = document.getElementById("imagePopup");
+    if (popup) {
+        popup.classList.remove("show"); // Sembunyiin popup
+    }
+    
+    // balikin scroll modal album biar normal lagi
+    const albumModal = document.getElementById("albumModal");
+    if (albumModal) {
+        albumModal.style.overflow = "auto";
+    }
+};
+
+// deteksi klik pas web udah loading
+document.addEventListener("DOMContentLoaded", () => {
+    const popup = document.getElementById("imagePopup");
+    const popupImg = document.getElementById("popupImage");
+
+    // close pas background hitam diklik
+    if (popup) {
+        popup.addEventListener("click", (e) => {
+            if (e.target.id === "imagePopup") {
+                window.closeImagePopup();
+            }
+        });
+    }
+
+    // close pas gambarnya sendiri diklik 
+    if (popupImg) {
+        popupImg.addEventListener("click", () => {
+            window.closeImagePopup();
+        });
+    }
+});
+
+// close ESC
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const imagePopup = document.getElementById("imagePopup");
+        // prioritas nutup popup foto dulu
+        if (imagePopup && imagePopup.classList.contains('show')) {
+            window.closeImagePopup();
+        } else {
+            // kalau popup foto lagi gak buka, coba nutup album (kalau ada)
+            if (typeof closeAlbum === "function") {
+                closeAlbum();
+            }
+        }
+    }
+});
